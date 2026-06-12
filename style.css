@@ -1,0 +1,81 @@
+body {
+    background: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: "Helvetica Neue", sans-serif;
+    margin: 0;
+}
+
+/* Search Bar Styling to match the image */
+.search-bar {
+    background-color: #161616; /* Dark background like the screenshot */
+    width: 200px;              /* Card ki width ke barabar kiya */
+    border: 1px solid #222;    /* Subtle border */
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+    background-color: #1c1c1c;
+    border-color: #333;
+}
+
+/* Card Styling */
+.card {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.blurred-layer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://images.unsplash.com/photo-1652514846497-85b7d6acefc9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-position: bottom;
+    filter: blur(10px);
+    z-index: 1;
+    
+    /* Fixed masking text syntax */
+    mask-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+}
+
+.content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px; /* Right side se text overflow na ho */
+    color: white;
+    z-index: 2;
+}
+
+.content h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.content p {
+    font-size: 12px; /* Screenshot ke hisab se thoda chota kiya */
+    color: #ccc;
+    line-height: 1.4;
+}
