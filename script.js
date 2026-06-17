@@ -26,38 +26,51 @@ const users = [
     }
 ];
 
-function ShowUsers(arr) {
-    // 1. Create Layout Wrappers OUTSIDE the loop so they only generate once
-    const mainContainer = document.createElement('div');
-    mainContainer.className = 'flex flex-col gap-10 items-center';
+// --- 1. INITIALIZE LAYOUT ---
+const mainContainer = document.createElement('div');
+mainContainer.className = 'flex flex-col gap-10 items-center';
 
-    const searchInput = document.createElement('input');
-    searchInput.className = 'search-bar px-5 py-3 rounded-lg outline-none text-[#888]';
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Search...';
+const searchInput = document.createElement('input');
+searchInput.className = 'search-bar px-5 py-3 rounded-lg outline-none text-[#888]';
+searchInput.type = 'text';
+searchInput.placeholder = 'Search...';
 
-    const cardsContainer = document.createElement('div');
-    cardsContainer.className = 'flex gap-5 flex-wrap justify-center'; // Added flex-wrap just in case they overflow
+const cardsContainer = document.createElement('div');
+cardsContainer.className = 'flex gap-5 flex-wrap justify-center';
 
-    // Assemble outer layout elements
-    mainContainer.appendChild(searchInput);
-    mainContainer.appendChild(cardsContainer);
+mainContainer.appendChild(searchInput);
+mainContainer.appendChild(cardsContainer);
+document.body.appendChild(mainContainer);
 
-    // 2. Loop only to create individual cards
+
+// --- 2. RENDER CARDS FUNCTION (With "No User Found" logic) ---
+function renderCards(arr) {
+    cardsContainer.innerHTML = ''; // Reset container
+
+    // CHECK: If the filtered array is empty, show the fallback message
+    if (arr.length === 0) {
+        const noUserMessage = document.createElement('h2');
+        noUserMessage.textContent = "No user Found";
+        noUserMessage.className = "text-xl text-gray-500 font-semibold mt-5"; // Styling it nicely
+        cardsContainer.appendChild(noUserMessage);
+        return; // Stop execution here so it doesn't try to run the loop below
+    }
+
+    // Otherwise, loop and build cards as usual
     arr.forEach(function (user) {
         const card = document.createElement('div');
         card.className = 'card';
 
         const cardImg = document.createElement('img');
         cardImg.src = user.pic;
-        cardImg.className = 'bg-img'; // Fixed: direct className string assignment or use cardImg.classList.add('bg-img')
+        cardImg.className = 'bg-img'; 
 
         const blurredLayer = document.createElement('div');
-        blurredLayer.style.backgroundImage = `url('${user.pic}')`; // Fixed: Wrapped  in CSS url() syntaxdynamic string
+        blurredLayer.style.backgroundImage = `url('${user.pic}')`; 
         blurredLayer.className = 'blurred-layer';
 
         const contentDiv = document.createElement('div');
-        contentDiv.className = 'content'; // Fixed syntax
+        contentDiv.className = 'content'; 
 
         const username = document.createElement('h3');
         username.textContent = user.name;
@@ -65,7 +78,6 @@ function ShowUsers(arr) {
         const description = document.createElement('p');
         description.textContent = user.bio;
 
-        // Assembly of Card
         contentDiv.appendChild(username);
         contentDiv.appendChild(description);
 
@@ -73,12 +85,21 @@ function ShowUsers(arr) {
         card.appendChild(blurredLayer);
         card.appendChild(contentDiv);
 
-        // Append this specific card to the shared cards container
         cardsContainer.appendChild(card);
     });
-
-    // 3. Append the whole layout to the DOM once
-    document.body.appendChild(mainContainer);
 }
 
-ShowUsers(users);
+// Initial render
+renderCards(users);
+
+
+// --- 3. DYNAMIC SEARCH FILTER ---
+searchInput.addEventListener('input', function () {
+    const searchValue = searchInput.value.toLowerCase().trim();
+
+    const filteredUsers = users.filter(function(user) {
+        return user.name.toLowerCase().includes(searchValue);   
+    });
+    
+    renderCards(filteredUsers);
+});
